@@ -7,9 +7,9 @@
     "minimum": 11,
     "verified": 11.300
   },
-  "url": "https://github.com/l1necrasher/sentimentalFoundry/",
-  "manifest": "https://raw.githubusercontent.com/l1necrasher/sentimentalFoundry/sentimental/system.json",
-  "download": "https://github.com/l1necrasher/sentimentalFoundry/archive/refs/heads/main.zip",
+  "url": "https://github.com/l1necrasher/sentimental",
+  "manifest": "https://github.com/l1necrasher/sentimental/blob/main/system.json",
+  "download": "https://github.com/l1necrasher/sentimental/archive/refs/heads/main.zip",
   "templateVersion": 2,
   "author": "l1necrasher",
   "authors": [
