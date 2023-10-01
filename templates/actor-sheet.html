@@ -1,0 +1,182 @@
+<form class="{{cssClass}}" autocomplete="off">
+  {{!-- Sheet Header --}}
+  <header class="sheet-header" data-ident="{{actor._id}}">
+      <div class="header-fields">          
+		  <h1 class="charname">
+		  <img class="profile-img" src="{{actor.img}}" data-edit="img" title="{{actor.name}}"/>
+		  <input class="charname" name="name" type="text" value="{{actor.name}}" placeholder="{{localize SENTIMENTAL.Name}}" /></h1>
+			
+            <div class="buttonRow">
+			<span class="healthInput"><input type="number" class="healthInput" name="system.health" value="{{system.health}}"/>/<e>{{system.healthMax}}<e></span>
+				<button id="dyeRoll">
+					<p>
+					Roll to Dye!
+					</p>
+				</button>
+				<label for="igniteSwing" title="Ignite Swing"><a id="igniteSwing"><i class="fa-solid fa-fire"></i></a></label>
+				<span id="swingStatus">{{system.dyed}}</span>
+				
+			<div class="buttonRow">
+				<label for="system.notepad"><i class="fa-solid fa-circle-info"></i></label>
+				<input name="system.notepad" type="text" value="{{system.notepad}}"/>
+				
+				<label for="system.exp"><i class="fa-solid fa-stars"></i></label>
+				<input name="system.exp" type="number" value="{{system.exp}}"/>
+				<label for="system.speed"><i class="fa-solid fa-rabbit-running"></i></label>
+				<input name="system.speed" type="number" value="{{system.speed}}"/>
+			</div>
+            </div>
+			
+          </div>
+      </div>
+  </header>
+ 
+ 
+{{!-- Sheet Nav --}}
+<nav class="sheet-tabs tabs sentiment" data-group="primary">
+<a class="" data-tab="dice"><i class="fa-solid fa-dice"></i></a>
+<a class="" data-tab="gifts"><i class="fa-solid fa-hands-holding-circle"></i></a>
+<a class="" data-tab="bonds"><i class="fa-solid fa-link-simple"></i></a>
+<a class="" data-tab="notes"><i class="fa-solid fa-note"></i></i></a>
+<a class="" data-tab="configure"><i class="fa-solid fa-gears"></i></a>
+</nav>
+	
+ 
+
+{{!-- Sheet Body --}}
+  <section class="sheet-body">
+    <!--##################### DICE TAB #####################-->
+  <div class="tab dice" data-group="primary" data-tab="dice">
+	<ol id="attrDiceList">
+		{{#each system.attr_dice as |key|}}  
+		<li class="diceContainer" id="{{key.id}}">
+		
+		<span>
+		<input class="itemLvl" name="system.attr_dice.{{key.id}}.lvl" type="number" value="{{key.lvl}}" style="border-image: none; background-color: var(--dice_{{key.id}}); color:var(--dice_contrast-{{key.id}})"/>	
+		
+		<input class="colorTitle" name="system.attr_dice.{{key.id}}.title" type="text" value="{{key.title}}" style="border-right: 0.25em solid var(--dice_{{key.id}}); border-image: none;"/>	
+		</span>
+		
+			<button name="system.attr_dice.{{key.id}}.value" class='diceVal jiggle' style="background-color: var(--dice_{{key.id}}); border-color: var(--dice_{{key.id}})">{{key.value}}</button>
+			<label class="diceName" for="system.attr_dice.{{key.id}}.value">{{key.id}}</label>
+			<div class="flexRow">			
+				<a class="linkIsLocked"><i id="lockedImg" class="fa-solid fa-lock"></i></a>	
+				<a class="linkIsSwing"><i id="swingImg" class="fa-solid fa-droplet"></i></i></a>
+			</div>
+		</li>
+		{{/each}}
+	</ol>
+	<hr>
+	<div class="flexRow">
+	<button id="justRoll">colorless roll</button>
+	</div>
+  </div>
+
+  <!--##################### GIFTS TAB #####################-->
+  <div class="tab gifts" data-group="primary" data-tab="gifts">
+	<ol id="giftList">
+		  {{#each gifts as |item id|}} 
+		<li class="order{{item.system.slot}}">
+		<div class="giftCol">
+			<img class="itemImg" src="{{item.img}}" title="{{item.name}}"/>
+			<span class="itemLvl">{{item.system.lvl}}</span>
+			<input class="itemName" type="text" value="{{item.name}}" readonly/>
+			<span>
+			<a class="openItemSheet" data-ident="{{item._id}}" title="Edit Gift"><i class="fa-solid fa-gear" data-ident="{{item._id}}"></i></a>
+			<a class="deleteItem" data-ident="{{item._id}}" title="Delete Gift"><i class="fa-solid fa-trash-can" data-ident="{{item._id}}"></i></a>
+			</span>
+		</div>
+		<div class="giftCol"><span class="itemBlurb">{{item.system.blurb}}</span></div>
+		<div class="toggleContent">
+		<i class="fa-solid fa-caret-down"></i>
+		<div class="giftDesc">{{item.system.description}}</div></div>
+		</li>
+		  {{/each}}
+		<a class="giftCreate"><i class="fa-solid fa-plus"></i>Gift</a>
+	</ol>
+  </div>  
+  
+  <!--##################### BONDS TAB #####################-->
+  <div class="tab bonds" data-group="primary" data-tab="bonds">
+	<ol id="bondList">
+		  {{#each bonds as |item id|}} 
+		<li class="order{{item.system.slot}}">
+		<div class="bondsCol">
+			<span class="centerSpan" >
+			<i class="fa-solid fa-link-horizontal"></i>
+			<img class="itemImg" src="" data-ident="{{item._id}}" title="{{item.name}}"/>
+			<i class="fa-solid fa-link-horizontal"></i>
+			</span>
+			<span class="centerSpan" >
+			<span class="itemLvl">{{item.system.lvl}}</span>
+			<input class="itemName" type="text" value="{{item.name}}" readonly/>
+			</span>
+			<span class="bondOptions">
+			<a class="openItemSheet" data-ident="{{item._id}}" title="Edit Bond"><i class="fa-solid fa-gear" data-ident="{{item._id}}"></i></a>
+			<a class="deleteItem" data-ident="{{item._id}}" title="Delete Bond"><i class="fa-solid fa-trash-can" data-ident="{{item._id}}"></i></a>
+			</span>
+			<span class="itemBlurb">{{item.system.blurb}}</span>
+		</div>
+		</li>
+		  {{/each}}
+	<span class="bondCreate droppable"><i class="fa-solid fa-plus"></i></span>
+	</ol>
+
+  </div>   
+  
+  <!--##################### NOTES TAB #####################-->
+  
+  <div class="tab notes" data-group="primary" data-tab="notes">
+   	<ol id="notesList">
+
+		<div class="actorDesc toggleContent">
+		<label for="actorDesc"><i class="fa-solid fa-caret-down"></i>Description: </label>
+		<div class="toToggle">
+			{{editor actor.system.text.description target="system.text.description" button=true owner=owner editable=editable}}
+		</div>
+		</div>
+		<div class="actorBio toggleContent">
+		<label for="actorBio"><i class="fa-solid fa-caret-down"></i>Biography:</label>
+		<div class="toToggle">
+			{{editor actor.system.text.biography target="system.text.biography" button=true owner=owner editable=editable}}
+		</div>
+		</div>
+		<div class="actorNotes toggleContent">
+		<label for="actornotes"><i class="fa-solid fa-caret-down"></i>Notes:</label>		<div class="toToggle">
+			{{editor actor.system.text.notes target="system.text.notes" button=true owner=owner editable=editable}}
+		</div>
+		</div>
+
+	</ol>
+  </div>
+  
+  <!--##################### CONFIGURE TAB #####################-->
+  
+  <div class="tab configure" data-group="primary" data-tab="configure">
+   	<ol id="settingsList">
+		{{#each system.attr_dice as |key|}}  
+		<li id="{{key.id}}">
+		<span>Enable  <b style="background-color: var(--dice_{{key.id}}); color: var(--dice_contrast-{{key.id}})">{{key.id}}</b> attribute:
+			<a class="linkIsEnabled"/><i id="enabledImg" class="fa-solid fa-check"></i></a></span>
+			<span>
+			<img src="{{key.img}}">
+			<button type="button" class="file-picker" data-type="image" data-target="system.attr_dice.{{key.id}}.img" title="Browse Files" tabindex="-1">
+			Dye Image
+			<i class="fas fa-file-import fa-fw"></i>
+			</button>
+			<input class="invisInput" name="system.attr_dice.{{key.id}}.img" value="{{key.img}}"/>
+			</span>
+			<button class="rollMacro" data-color="{{key.id}}">Roll Macro
+				<i class="fa-solid fa-arrow-down-to-line" data-color="{{key.id}}"></i>
+			</button>
+			<button class="setSwingMan" data-color="{{key.id}}">Set Swing
+				<i class="fa-solid fa-droplet-degree" data-color="{{key.id}}"></i>
+			</button>
+		</span>
+		
+		</li>
+		{{/each}}
+	</ol>
+  </div>
+  </section>
+</form>

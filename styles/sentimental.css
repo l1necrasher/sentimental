@@ -1,0 +1,891 @@
+@font-face {
+	font-family: 'Mammut';
+	src: url('../assets/fonts/Mammut_OT_CAT.ttf');
+}
+@font-face {
+	font-family: 'Sono';
+	src: url('../assets/fonts/Sono[MONO,wght].ttf');
+}
+@font-face {
+	font-family: 'Asap';
+	src: url('../assets/fonts/Asap[wdth,wght].ttf');
+}
+
+:root {
+	--dice_red: #ff4d35;
+	--dice_contrast-red: #30050a;
+	
+	--dice_orange: #ff8a30;
+	--dice_contrast-orange: #641400;
+	
+	--dice_yellow: #ffd330;
+	--dice_contrast-yellow: #A92C00;
+	
+	--dice_green: #74d84d;
+	--dice_contrast-green: #47540D;
+	
+	--dice_blue: #5581bb;
+	--dice_contrast-blue: #171325;
+	
+	--dice_purple: #cf90f9;
+	--dice_contrast-purple: #170207;
+	
+	--dice_grey: #a79c95;
+	--dice_contrast-grey: #260e0e;
+	
+	--dice_white: #fffaf5;
+	--dice_contrast-white: #81776f;
+	
+	--dice_black: #070707;
+	--dice_contrast-black: #c9bfb5;
+	
+	--dice_colorless: #c9d8db;
+	--dice_contrast-colorless: #212c2e;
+	
+	--sentimentDarkerBG: #302318;
+	--sentimentDarkBG: #745c4e;
+	--sentimentMidBG: #c6bdb3;
+	--sentimentLightBG: #fcfdf7;
+	--sentimentFocus: #ff9500;
+}
+
+/* ####### OVERWRITES ####### */
+
+.window-app .window-content {
+	color: var(--sentimentDarkBG);
+	background-color: var(--sentimentLightBG);
+	background-image: none;
+	font-family: 'Asap';
+}
+
+.sentiment ol {
+	display: flex;
+		flex-direction: row;
+		align-items: center;
+		flex-wrap: wrap;
+		justify-content: flex-start;
+		align-content: space-around;
+	margin: 0;
+    padding: 0;	
+	list-style: none;
+	max-height: 35em;
+	overflow-y: auto;
+	overflow-x: hidden;
+}
+
+.sentiment ol::-webkit-scrollbar {
+	display: none;
+}
+
+.sentiment input[type="number"] {
+	border: none;
+	background-color: var(--sentimentMidBG);
+	font-family: 'Sono';
+	font-weight: 550;
+	border-radius: 3px;
+	color: var(--sentimentDarkerBG);
+}
+.sentiment input[type="text"] {
+	border:none;
+	border-bottom: 0.05em solid transparent;
+	border-image: linear-gradient(to right, var(--dice_red), var(--dice_yellow), var(--dice_blue) ) 1 stretch;	
+	font-family: 'Asap';
+	background-color: var(--sentimentLightBG);
+	border-radius: 3px;
+	color: var(--sentimentDarkerBG);
+}
+
+.sheet {
+	max-width: 600px;
+	font-weight: 450;
+}
+
+div.flexRow {
+	display: flex;
+    flex-wrap: wrap;
+    align-content: space-around;
+    justify-content: space-around;
+    align-items: flex-start;
+}
+button:hover, input[type="text"]:focus, input[type="number"]:focus {
+	box-shadow: 0 0 0.25em var(--sentimentFocus);
+}
+button:focus {
+	box-shadow: none;
+}
+a:focus, a:hover {
+	text-shadow: 0 0 0.5em var(--sentimentFocus);
+}
+
+/* ####### MESSAGES ####### */
+div.sentimentMessage {
+	color: var(--sentimentDarkBG);
+	background-color: var(--sentimentLightBG);
+	padding: 0.5em;
+	text-align: center;
+	border: 0.2em solid transparent;
+}
+
+div.sentimentMessage[data-msgtype="swing"] b {
+	border: 0.2em solid transparent;
+    padding: 0.1em;
+}
+
+div.sentimentMessage[data-msgType="ignite"]{
+    text-align: center;
+    font-size: 1.25em;
+    font-weight: 550;
+    border: 0.1em solid transparent;
+    border-image: url(../assets/border.png) 33% round;
+    border-image-outset: 2em;
+    border-image-width: auto;
+}
+div.sentimentMessage[data-msgtype="ignite"] p {
+	font-size: 0.75em;
+    font-weight: 450;
+    border-top: thin solid var(--sentimentDarkBG);
+    font-style: italic;
+    padding: 0.5em 0;
+}
+
+/* ####### CHARACTER SHEET ####### */
+.sheet nav.sentiment {
+    margin-bottom: 0.33em;
+    border: none;
+	padding: 0.2em;
+}
+
+.sheet nav.sentiment a {
+    flex: auto;
+    text-align: center;
+    padding-bottom: 0.4em;
+	border-bottom: thin solid var(--sentimentMidBG);
+}
+.sheet nav.sentiment a.active {
+    border-bottom: 0.33em solid var(--sentimentMidBG);
+}
+
+header.sheet-header h1.charname {
+	display: flex;
+	margin: 0.33em;
+}
+
+input.charname {
+	background: none;
+	font-family: 'Asap';
+	font-weight: 600;
+}
+
+img.profile-img {
+	width: 15em;
+	height: 15em;
+}
+
+header.sheet-header {
+	margin: 0em 1em;
+}
+
+div.buttonRow {
+	display: flex;
+	flex-direction: row;
+    justify-content: center;
+    align-content: center;
+	align-items: center;
+	padding: 0.125em;
+	flex-wrap: wrap;
+}
+
+button#dyeRoll {
+    border: 0;
+    border-radius: 0.75em;
+    background: linear-gradient(to right, var(--dice_red), var(--dice_yellow), var(--dice_blue) );
+    font-family: Sono;
+    color: var(--sentimentDarkBG);
+    font-weight: 800;
+    font-size: 1.15em;
+    flex: 0 1 12em;
+    line-height: 0.9em;
+}
+button#dyeRoll p {
+	background-color: var(--sentimentLightBG);
+	padding: 0.25em;
+	border-radius: 0.5em;
+}
+
+.sentiment input.healthInput[type="number"] {
+	width: 2.5em;
+    font-size: 1.25em;
+	text-align: right;
+	margin-right: 0.25em;
+}
+span.healthInput {
+	text-align: center;
+	margin: 0.5em;
+}
+span.healthInput e:hover {
+	font-weight: 900;
+}
+.buttonRow input {
+	flex: 0 1 4em;
+	margin: 0.5em;
+	margin-left: 0.2em;
+	margin-right: 1em;
+	font-size: 1.25em;
+}
+.buttonRow input[type="text"] {
+	flex: 1 1 8em;
+	margin: 0.5em;
+	margin-left: 0.2em;
+	margin-right: 1em;
+	font-size: 1em;
+}
+.buttonRow label {
+	display: flex;
+		justify-content: flex-end;
+    margin: 0.2em;
+}
+
+span#swingStatus {
+	padding: 0.33em;
+	flex: 0 1 8em;
+	box-shadow: 0 0 0.15em var(--sentimentMidBG) inset;
+	border-radius: 0.5em;
+	text-align: center;
+	font-weight: 650;
+}
+}
+a#igniteSwing {
+    padding: 0.2em;
+    flex: 0 0 1em;
+}
+
+button#justRoll {
+	flex: 0 1 10em;
+}
+
+/* ####### DICELIST CHARACTER SHEET ####### */
+ol#attrDiceList {
+    margin-top: 1em;
+	justify-content: space-around;
+}
+header.sheet-header i.fa-solid, nav.sheet-tabs i.fa-solid {
+	font-size: 1.5em;
+}
+
+label.diceName {
+    position: relative;
+    text-align: center;
+    margin-bottom: 0.25em;
+    font-size: 0.75em;
+}
+
+
+
+.sentiment input.colorTitle {
+	text-align: center;
+    font-weight: 600;
+    border-radius: 0.05em;
+    border-bottom: none;
+	color: var(--sentimentDarkBG);
+	background-color: var(--sentimentLightBG);
+	box-shadow: 0 0 0.2em var(--sentimentMidBG) inset;
+}
+
+li.diceContainer {
+	display: flex;
+    align-items: center;
+	flex-direction: column;
+}
+
+li.diceContainer input.itemLvl[type="number"] {
+	max-width: 1.75em;
+    border-radius: 0em;
+    border-start-start-radius: 0.5em;
+    border-end-start-radius: 0.5em;
+    background-color: var(--sentimentMidBG);
+    font-size: 0.95em;
+    color: black;
+    font-weight: 700;
+    text-align: center;
+
+}
+
+li.diceContainer span {
+	display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+li.diceContainer a {
+	padding: 0.2em;
+	margin-bottom: 0.5em;
+}
+
+.diceVal {
+	display: flex;
+    justify-content: space-around;
+    align-items: center;
+    width: 2.25em;
+    height: 2.25em;
+    border: 0.05em outset var(--sentimentMidBG);
+    border-radius: 0.5em;
+    font-size: 2em;
+	font-weight: 900;
+	margin: 0.2em;
+	font-family: 'Sono';
+	color: var(--sentimentLightBG);
+	-webkit-text-stroke-width: 0.04em;
+	-webkit-text-stroke-color: #523737;
+	text-shadow: 0 0 0.2em #523737;
+}
+
+.diceVal:disabled {
+	opacity: 50%;
+	color: var(--sentimentLightBG);
+}
+
+button.jiggle:focus {
+	animation-name: diceRoll;
+	animation-duration: 0.5s;
+}
+@keyframes diceRoll {
+	0% {transform: rotateZ(0deg);}
+	25% {transform: rotateZ(-5deg);}
+	50% {transform: rotateZ(5deg);}
+	100% {transform: rotateZ(0deg);}
+}
+
+
+button#justRoll {
+	color: var(--dice_contrast-colorless);	
+	background-color: var(--dice_colorless);
+    border: 0.05em outset var(--dice_colorless);
+	border-radius: 0.5em;
+	
+}
+
+
+/* ####### ROLLABLES ####### */
+
+div.rollTitle {
+	font-family: 'Mammut';
+	justify-content: space-around;
+	font-size: calc(2rem - 10%);
+	font-weight: 500;
+	position: relative;
+    display: flex;
+    background: white;
+    z-index: 9;
+	color: var(--sentimentDarkBG);
+	text-align: center;
+	min-height: 1em;
+	
+	border-inline: 16px solid transparent;
+	border-image: linear-gradient(to bottom, var(--dice_red), var(--dice_yellow), var(--dice_blue) ) 1 stretch;
+
+}
+div.smallerText {
+	font-size: 1.5em;
+	font-family: 'Sono';
+	font-weight: 600;
+	padding-bottom: 0.2em;
+}
+span.smallerText {
+	font-size: 0.55em;
+	color: var(--sentimentMidBG);
+}
+
+.sentiment i.fa-solid, .sentiment i.fa-duotone {
+ padding: 0 0.2em;
+ color: var(--sentimentDarkBG);
+}
+.sentiment i.fa-duotone:after {
+ opacity: var(--fa-secondary-opacity,.6);
+}
+i.fa-dice-d20 {
+	font-size: 0.9em;
+}
+.diceResult {
+	padding: 0.15em 0;
+	padding-bottom: 0.3em;
+	font-size: 3em;
+	font-kerning: none;
+	text-align: center;
+	display: flex;
+	flex-wrap: wrap;
+	flex-direction: row;
+    justify-content: center;
+	
+	background-color: var(--sentimentLightBG);
+	box-shadow: 0 0 0.1em var(--sentimentMidBG) inset;
+
+}
+.diceResult span {
+	margin: 0em 0.2em;
+}
+.diceResult p {
+    color: var(--sentimentMidBG);
+    margin: 0;
+    font-size: 0.9em;
+	font-family: 'Sono';
+    font-weight: 400;
+}
+
+[data-outline="yes"] {
+	-webkit-text-stroke-width: 0.02em;
+	-webkit-text-stroke-color: var(--sentimentDarkBG);	
+}
+[data-title] {
+	position: relative;
+	
+}
+[data-title]:after {
+    content: attr(data-title);
+	font-family: 'Sono';
+    color: var(--sentimentLightBG);
+	font-size: 0.6em;
+    position: absolute;
+		top: 1em;
+		left: 0.46em;
+	white-space: nowrap;
+    z-index: 99999;
+	font-weight: 900;
+	-webkit-text-stroke-width: 0.05em;
+	-webkit-text-stroke-color: #523737;
+	text-shadow: 0 0 0.1em white;
+}
+[data-title^="-"]:after,
+[data-title][data-long]:after  {
+	left: 0.1em;
+}
+
+[data-title="20"]:after {
+	-webkit-text-stroke-color: #2ead00;
+}
+
+.diceSum {
+	font-size: 1.25em;
+	font-kerning: none;
+	text-align: center;
+	display: flex;
+	flex-direction: row;
+    justify-content: space-evenly;
+
+}
+div.dyedAnnounce {
+	text-align: center;
+	background-color: var(--sentimentLightBG);
+	color: var(--sentimentFocus);
+	font-weight: 500;
+	padding: 0.1em;
+}
+div.colorTitle {
+padding: 0.3em;
+    font-size: 1em;
+    text-align: center;
+    min-height: 1em;
+    background-color: white;
+    color: var(--sentimentDarkBG);
+    background-color: white;
+    font-weight: 650;
+    border-inline: 16px solid var(--sentimentDarkBG);
+}
+
+.chat-message {
+	background: var(--sentimentDarkerBG);
+	color: var(--sentimentLightBG);
+	
+}
+
+.chat-message.whisper {
+	background: var(--sentimentDarkBG);
+	color: var(--sentimentLightBG);
+}
+
+.chat-message.blind {
+	box-shadow: 0 0 0.5em var(--sentimentFocus) inset;
+    border: none;
+}
+
+.message-sender, .message-metadata  {
+	color: var(--sentimentMidBG);
+	font-family: 'Asap';
+	font-weight: 500;
+}
+.editor {
+	min-height: 5em;
+	box-shadow: 0 0 0.2em var(--sentimentMidBG) inset;
+	padding: 0.5em 1em;
+}
+
+.tox.tox-tinymce{
+	min-height: 15em !important;
+}
+
+/*##########  ACTOR GIFT STUFF  ##########*/
+
+
+ol#giftList {
+	flex-direction: column;
+	flex-wrap: nowrap;
+}
+
+a.giftCreate {
+    order: 9999;
+    font-weight: 700;
+    font-size: 1.25em;
+    align-self: flex-end;
+    flex: 1 0 100%;
+    padding: 0.4em 2em;
+    text-align: right;
+}
+
+span.bondCreate {
+	flex: 1 0 100%;
+	font-size: 1.25em;
+	padding: 1em;
+	text-align: center;
+}
+
+ol#giftList li {
+    display: flex;
+    order: 99;
+    flex-direction: column;
+    border: thin solid var(--sentimentMidBG);
+    margin: 0.33em 1em;
+    border-radius: 5px;
+    width: 90%;
+}
+
+ol#giftList li.order6 {
+	border-color: var(--dice_purple);
+	order: 6;
+}
+ol#giftList li.order5 {
+	border-color: var(--dice_blue);
+	order: 5;
+}
+ol#giftList li.order4 {
+	border-color: var(--dice_green);
+	order: 4;
+}
+ol#giftList li.order3 {
+	border-color: var(--dice_yellow);
+	order: 3;
+}
+ol#giftList li.order2 {
+	border-color: var(--dice_orange);
+	order: 2;
+}
+ol#giftList li.order1 {
+	border-color: var(--dice_red);
+	order: 1;
+}
+ol#giftList li.order0 {
+	border-color: var(--dice_white);
+	order: 0;
+}
+
+.giftCol {
+	display: flex;
+		flex-direction: row;
+		justify-content: space-between;
+    margin: 0.5em;
+    align-items: center;
+}
+
+.giftCol i {
+	font-size: 1.5em;
+	margin: 0.2em;
+	margin-right: 0.4em;
+}
+.giftCol span {
+	flex-direction: row;
+    display: flex;
+}
+
+.itemLvl {
+	background-color: var(--sentimentDarkBG);
+	color: var(--sentimentLightBG);
+	font-family: 'Sono';	
+}
+
+input.itemLvl[type="text"] {
+	background-color: var(--sentimentDarkBG);
+	color: var(--sentimentLightBG);
+	font-family: 'Sono';	
+}
+
+ol#giftList .itemLvl {
+	background-color: var(--sentimentDarkBG);
+	color: var(--sentimentLightBG);
+	font-family: 'Sono';
+	border-radius: 0.66em;
+    padding: 0.2em 0.5em;	
+}
+
+input.itemName {
+	font-weight: 700;
+	font-size: 1.22em;
+	margin: 0.2em;
+	border: none;
+	background: none;
+	color: var(--sentimentDarkBG);
+}
+
+ol#giftList .itemBlurb {
+    padding: 0.3em 0.5em;
+    border-radius: 0.33em;
+    font-weight: 450;
+    flex: 1 0 16em;
+}
+
+ol#giftList li input {
+	flex: 0 1 20em;
+	margin: 0.5em;
+	overflow: hidden;
+	white-space: nowrap;
+	text-overflow: ellipsis;
+}
+
+ol#giftList img.itemImg{
+	max-width: 3em;
+	max-height: 3em;
+	border-radius: 0.33em;
+	border: none;
+	margin: 0.33em;
+}
+
+ol#giftList .giftDesc{
+    border-radius: 0.33em;
+    border: thin solid var(--sentimentMidBG);
+    padding: 1em;
+	color: var(--sentimentDarkerBG);
+	text-align: initial;
+	display: none;
+}
+
+ol#giftList .toggleContent{
+	min-height: 1em;
+    background-color: var(--sentimentMidBG);
+	text-align: center;
+	max-width: 38em;
+}
+ol#giftList .toggleContent i{
+	color: var(--sentimentLightBG);
+}
+
+
+/*##########  ACTOR BOND STUFF  ##########*/
+
+span.centerSpan {
+	display: flex;
+    align-items: center;
+}
+
+ol#bondList span i {
+	font-size: 1.25em;
+	margin: 0.55em;
+}
+
+.bondsCol span.itemBlurb {
+	padding: 0.3em;
+    text-align: center;
+}
+
+ol#bondList span.centerSpan i {
+	font-size: 1.5em;
+}
+
+ol#bondList {
+	align-content: flex-start;
+    justify-content: center;
+}
+
+ol#bondList li {
+	margin: 0.5em 1em;
+	box-shadow: 0 0 0.3em var(--sentimentMidBG);
+}
+
+ol#bondList .itemLvl {
+	padding: 0 0.3em;
+    border-radius: 1em;
+	margin-right: 0.25em;
+}
+
+ol#bondList::-webkit-scrollbar {
+    display: none;
+}
+div.bondsCol {
+	display: flex;
+    flex-direction: column;
+    align-items: center;
+	margin: 1em;
+}
+.bondsCol .itemImg {
+    width: 6em;
+    height: 6em;
+	margin-bottom: 0.33em;
+}
+
+/*##########  ACTOR CONFIGURE TAB  ##########*/
+ol#settingsList {
+    flex-direction: column;
+    align-content: stretch;
+    align-items: stretch;
+}
+
+ol#settingsList li {
+	display: flex;
+		flex-direction: column;
+		justify-content: center;
+		flex-wrap: wrap;
+    margin: 0.25em 0em;
+    padding: 0.25em;
+    min-width: 9em;
+}
+
+ol#settingsList li span{
+	display: flex;
+		justify-items: center;
+		justify-content: space-evenly;
+	padding: 0.1em;
+}
+ol#settingsList li span b{
+	padding: 0em 0.33em;
+	border-radius: 0.5em;
+}
+
+ol#settingsList .invisInput {
+	display:none;
+}
+
+ol#settingsList img {
+	height: 3em;
+    width: 3em;
+    margin-right: 0.2em;
+}
+
+ol#settingsList button {
+    flex: auto;
+    border: thin solid var(--sentimentDarkBG);
+    background-color: var(--sentimentMidBG);
+    margin: 0.1em 0em;
+}
+
+ol#settingsList button i {
+	flex: auto;
+	color: var(--sentimentDarkerBG)
+}
+
+
+/*##########  ITEM SHEET  ##########*/
+div.itemSheet {
+    display: flex;
+	flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
+}
+
+div.itemSheet label {
+	margin-left: 1em;
+}
+div.itemSheet .itemLabels {
+	flex: auto;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: center;
+}
+
+.sheet-header input[name="system.slot"] {
+    flex: 0 1 2em;
+    text-align: center;
+    font-weight: 600;
+}
+
+div.itemDesc {
+	margin: 0.1em 0.5em;
+}
+
+div.itemSheet .shortInput {
+	flex: 0 1 5em;
+	margin: 0.5em;
+}
+.sentiment input[name="system.blurb"]{
+    max-width: 25em;
+    margin: 0.5em;
+    border: none;
+    background-color: var(--sentimentMidBG);
+    padding: 0.6em;
+}
+
+/* for bonds! */
+.bondmate {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin: 0.33em;
+}
+
+.bondmate .profile-img {
+	height: 3em;
+    width: 3em;
+}
+
+.bondmate span {
+	font-weight: 700;
+}
+
+/* dialog */
+div.sentimentDialog {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin-bottom: 1em;
+}
+
+div.sentimentDialog input {
+	flex: 0 1 50%;
+    margin-left: 1em;
+}
+
+div.sentimentDialog input {
+	flex: 0 1 50%;
+    margin-left: 1em;
+}
+
+/* notes tab */
+ol#notesList {
+	flex-direction: row;
+    font-size: 1.125em;
+    color: var(--sentimentDarkerBG);
+    align-content: flex-start;
+}
+
+ol#notesList label i {
+	margin-right: 1em;
+	color: var(--sentimentLightBG);
+}
+
+ol#notesList label{
+	font-weight: 700;
+	margin: 0.25em;
+}
+
+ol#notesList .editor{
+	margin-top: 0.25em;
+	background-color: var(--sentimentLightBG);
+}
+
+.actorDesc, .actorBio, .actorNotes {
+    min-height: 2em;
+    width: 100%;
+    background-color: var(--sentimentMidBG);
+    padding: 0.5em 0em;
+    border-bottom: thin solid var(--sentimentDarkerBG);
+    margin-top: 0.5em;
+}
+
+
+

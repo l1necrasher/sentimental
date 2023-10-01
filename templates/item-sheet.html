@@ -1,0 +1,31 @@
+<form class="{{cssClass}} sentiment" autocomplete="off">
+    <header class="sheet-header">
+        <img class="profile-img" src="{{item.img}}" data-edit="img" title="{{item.name}}"/>
+		<h1 class="charname"><input class="charname" name="name" type="text" value="{{item.name}}" placeholder="Name"/></h1>
+		<input title="Gift Slot" type="number" name="system.slot" value="{{item.system.slot}}" class="giftOrder"/>
+    </header>
+
+    {{!-- Sheet Body --}}
+    <section class="sheet-body">
+	<div class="itemSheet">
+	<label for="itemBlurb"><i class="fa-solid fa-circle-info"></i></label>
+	<input value="{{item.system.blurb}}" name="system.blurb" type="text"/><br>
+<span class="itemLabels">
+		<label for="system.lvl">Level: </label>
+		<input  class="shortInput" name="system.lvl" type="number" value="{{item.system.lvl}}"/>
+		
+		<label for="system.exp"><i class="fa-solid fa-stars"></i></label>
+		<input  class="shortInput" name="system.exp" type="number" value="{{item.system.exp}}"/>
+
+		<div class="bondmate">
+		<img class="profile-img bondmate" src="" title="{{item.system.bondmate}}"/>
+		<span class="bondmateName"></span>
+		</div>
+		</span>
+    </div>
+	<div class="itemDesc">
+	<label for="itemDesc">Description:</label>
+		{{editor item.system.description target="system.description" button=true owner=owner editable=editable}}
+	</div>
+    </section>
+</form>
