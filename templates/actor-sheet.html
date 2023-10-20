@@ -13,8 +13,10 @@
 					Roll to Dye!
 					</p>
 				</button>
+				<span style="display:flex;">
 				<label for="igniteSwing" title="Ignite Swing"><a id="igniteSwing"><i class="fa-solid fa-fire"></i></a></label>
 				<span id="swingStatus">{{system.dyed}}</span>
+				</span>
 				
 			<div class="buttonRow">
 				<label for="system.notepad"><i class="fa-solid fa-circle-info"></i></label>
@@ -84,6 +86,7 @@
 			<span>
 			<a class="openItemSheet" data-ident="{{item._id}}" title="Edit Gift"><i class="fa-solid fa-gear" data-ident="{{item._id}}"></i></a>
 			<a class="deleteItem" data-ident="{{item._id}}" title="Delete Gift"><i class="fa-solid fa-trash-can" data-ident="{{item._id}}"></i></a>
+			<a class="sendItem" data-ident="{{item._id}}" title="Delete Gift"><i class="fa-solid fa-message-arrow-up-right" data-ident="{{item._id}}"></i></a>
 			</span>
 		</div>
 		<div class="giftCol"><span class="itemBlurb">{{item.system.blurb}}</span></div>
@@ -92,7 +95,7 @@
 		<div class="giftDesc">{{item.system.description}}</div></div>
 		</li>
 		  {{/each}}
-		<a class="giftCreate"><i class="fa-solid fa-plus"></i>Gift</a>
+		<a class="giftCreate"><i class="fa-solid fa-plus"></i></a>
 	</ol>
   </div>  
   

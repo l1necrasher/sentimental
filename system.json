@@ -2,14 +2,14 @@
   "id": "sentimental",
   "title": "Sentimental",
   "description": "A Foundry implementation of Sentiment, based on ElusiveZenith's implementation of [Lasers and Feelings] & Steve Simenic's implementation of [Basic Fantasy RPG], which is itself based on the Boilerplate System by Asacolips Projects. Hoh boy! See the Sentiment RPG at https://www.patreon.com/sentimentttrpg/",
-  "version": "1",
+  "version": "1.0.0",
   "compatibility": {
     "minimum": 11,
     "verified": 11.300
   },
   "url": "https://github.com/l1necrasher/sentimental",
-  "manifest": "https://github.com/l1necrasher/sentimental/blob/main/system.json",
-  "download": "https://github.com/l1necrasher/sentimental/archive/refs/heads/main.zip",
+  "manifest": "https://github.com/l1necrasher/sentimental/releases/download/1.0.0/system.json",
+  "download": "https://github.com/l1necrasher/sentimental/releases/download/1.0.0/sentimental.zip",
   "templateVersion": 2,
   "author": "l1necrasher",
   "authors": [

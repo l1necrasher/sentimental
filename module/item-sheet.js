@@ -9,8 +9,8 @@ export class SentimentalItemSheet extends ItemSheet {
 	  return mergeObject(super.defaultOptions, {
 			classes: ["sentimental", "sheet", "item"],
 			template: "systems/sentimental/templates/item-sheet.html",
-			width: 520,
-			height: 530,
+			width: 620,
+			height: 600,
 		});
   }
 

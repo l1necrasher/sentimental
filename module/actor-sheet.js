@@ -19,7 +19,7 @@ export class SentimentalActorSheet extends ActorSheet {
     return mergeObject(super.defaultOptions, {
 	  classes: ["sentiment", "sheet", "actor"],
       template: "systems/sentimental/templates/actor-sheet.html",
-      width: 600,
+      width: 650,
       height: 800,
 	  tabs: [{navSelector: ".sheet-tabs", contentSelector: ".sheet-body", initial: "dice"}],
       dragDrop: [{ dragSelector: ".draggable", dropSelector: ".droppable" }],
@@ -242,7 +242,7 @@ export class SentimentalActorSheet extends ActorSheet {
 				)
 			);
 			
-		let isLocked = getProperty(game.actors.get(thisActorID),("system.attr_dice."+color+".isLocked"));		
+		let isLocked = getProperty(game.actors.get(thisActorID),("system.attr_dice."+color+".isLocked"));
 		
 		lockedUpdate(thisActorID, color, isLocked);
 			
@@ -281,7 +281,7 @@ export class SentimentalActorSheet extends ActorSheet {
 						display.css("color","var(--dice_contrast-"+color+")");
 						display.html("dyed "+color+"!");
 						quickMessage(actorName,
-						"<p>"+actorName+" just <b>manually</b> swung <b style='border-color: var(--dice_"+color+")'>"+color+"</b> with a value of "+getProperty(c, "system.attr_dice."+color+".value")+"!</p>",
+						"<p>"+actorName+" just <b>manually</b> swung </p><p><b style='border-color: var(--dice_"+color+")'>"+color+"</b> with a value of "+getProperty(c, "system.attr_dice."+color+".value")+"!</p>",
 						"swing");
 
 
@@ -311,9 +311,30 @@ export class SentimentalActorSheet extends ActorSheet {
 			display.css("color","var(--dice_contrast-"+color+")");
 			display.html("dyed "+color+"!");
 			swingUpdate(thisActorID, color);
-			quickMessage(actorName,
-				"<p>"+actorName+" just swung <b style='border-color: var(--dice_"+color+")'>"+color+"</b> with a value of "+getProperty(c, "system.attr_dice."+color+".value")+"!</p>",
+			
+			let s = "<p>"+actorName+" just swung </p><p><b style='border-color: var(--dice_"+color+")'>"+color+"</b> with a value of <b style='border-color: var(--dice_"+color+")'>"+getProperty(c, "system.attr_dice."+color+".value")+"</b>!</p>";
+			
+			// do the sum
+			let dice = game.actors.get(thisActorID).system.attr_dice;
+			let sum = 0;
+			
+			Object.keys(dice).forEach(function (item, index) {
+				if (Object.values(dice)[index].isEnabled) {
+				sum += Object.values(dice)[index].value;
+				}
+			});
+			// ++++
+			sum += getProperty(c, "system.attr_dice."+color+".lvl");
+			
+			if (getProperty(c, "system.attr_dice."+color+".lvl") > 0) {
+				s = s + "<hr><p>new Roll-to-Dye total:</p><b>"+sum+"</b>";
+			}
+			
+			
+			
+			quickMessage(actorName,s,
 				"swing");
+
 		} else {
 			setProperty(c,("system.dyed"), "");
 			display.css("background-color","var(--sentimentLightBG)");
@@ -464,9 +485,28 @@ export class SentimentalActorSheet extends ActorSheet {
 		let item = game.actors.get(thisActorID).items.get(id);
 		li.slideUp(150, function() {
 			item.delete();
-		});
-
+		});		
+	});
+	
+	$(html).find("a.sendItem").on('click', event => {
+		let id = $(event.target).attr('data-ident');
+		let item = game.actors.get(thisActorID).items.get(id);
 		
+		let msgString = "<div><span>";
+		msgString += "<img src="+getProperty(item, "img")+"></>";
+		msgString += "<p class='giftLevel'>"+getProperty(item, "system.lvl")+"</p>";
+		msgString += "<b>"+getProperty(item, "name")+"</b>";
+		msgString += "</span>";
+		msgString += "<span class='blurb'>"+getProperty(item, "system.blurb")+"</span></div>";
+		
+		let desc = $.parseHTML(getProperty(item, "system.description"));
+		let descString = ""+$(desc).eq(0).text();
+		
+		msgString += "<div class='description'>"+descString+"</div>";
+		
+		//msgString += "<a class='msgItemSheet' data-ident="+id+" title='View Gift'><i class='fa-solid fa-gear' data-ident="+id+"></i></a>"
+		
+		quickMessage(game.actors.get(thisActorID).name,msgString,"gift");
 	});
 	
 	//fix the description

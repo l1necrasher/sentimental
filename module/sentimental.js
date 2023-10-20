@@ -6,9 +6,9 @@ import { diceValueUpdate } from "./updateFunctions.js";
  * @param {string} thisActorID - Name of the character rolling
 */
 
-async function makeRole(diceString, thisActorID) {
+async function makeRole(diceString, thisActorID, bonus) {
   let roll = await new Roll(diceString).roll();
-  let chatTemplate = evaluateRolls(roll, thisActorID);
+  let chatTemplate = evaluateRolls(roll, thisActorID, bonus);
   
   let actorName = getProperty(game.actors.get(thisActorID), "name");
   ChatMessage.create({
@@ -25,7 +25,27 @@ Hooks.once("ready", async function() {
 	  bondmate = game.actors.get(bondmate.documentId);
 	  createBond(actor, bondmate);
   });
+  
+  //version control the old fashioned way
+ console.log("# # # # # SENTIMENTAL ;; UPDATE: 20.10.23 # # # # # ");
+  
 });
+
+/*
+Hooks.on("createChatMessage", function()  {
+	let message = $(".sentimentMessage");
+	let thisActor = $(".sentimentMessage").attr('data-senderID');
+
+	setTimeout(function () {
+		$(message).find("a").on('click', event => {
+		let id = $(event.target).attr('data-ident');
+		let item = game.actors.get(thisActor).items.get(id);
+		item.sheet.render(true);		
+	});
+	}, 100);
+});
+*/
+
 
 async function createBond(actor, mate) {
 	let itemData = {
@@ -39,13 +59,7 @@ async function createBond(actor, mate) {
 }
 
 
-/**
- * @param {roll} r - A Roll object
- * @param {integer} num - An integer value found on the Lasers & Feelings character sheet in the number input
- * @param {RollTypes} roleType - an integer value of 1 or 0; 1 indicates a Lasers roll, 0 indicates a Feelings roll
- * @returns {string} resultContent - the final string result of number of successes and any Laser-Feelings to be returned
-*/
-function evaluateRolls(r, thisActorID) {
+function evaluateRolls(r, thisActorID, colorlessBonus) {
   
   var array = r.terms[0].results;
   var resultContent = "<div class='rollTitle'>Roll to Dye!</div><div class='diceResult'>";
@@ -53,11 +67,13 @@ function evaluateRolls(r, thisActorID) {
   let dice = game.actors.get(thisActorID).system.attr_dice;
   let resultIndex = 0;
   let sum = 0;
+  let dyeBonus = 0;
   
   Object.keys(dice).forEach(function (item, index) {
 	  if (Object.values(dice)[index].isEnabled) {
 		  //Object.values(dice)[index].value = array[resultIndex].result;
 		  let resultVal = 0;
+
 		  
 		  switch ((Object.values(dice)[index].isLocked)) {
 			  case false:
@@ -68,6 +84,7 @@ function evaluateRolls(r, thisActorID) {
 				diceValueUpdate(thisActorID, item, resultVal);			  
 			  } else {
 				resultVal = getProperty(game.actors.get(thisActorID),("system.attr_dice."+item+".value"));
+				dyeBonus = getProperty(game.actors.get(thisActorID),("system.attr_dice."+item+".lvl"));
 			  }
 
 			  sum += resultVal;			  
@@ -96,10 +113,40 @@ function evaluateRolls(r, thisActorID) {
 			  
 			}
 			resultIndex++;
-		  }
+		  }	  
 
   });
-  resultContent += "</div><div class='rollTitle smallerText'> = "+sum+"</div>";
+  
+  // add the extra dice
+  let extraSum = -1;
+  if (array.length >= resultIndex) {
+	  extraSum = 0
+	for (let i = resultIndex; i < array.length; i++) {
+		resultContent += makeDiceHtml(array[i].result, "colorless", "d6");
+		extraSum += array[i].result;
+	}	
+  }
+  
+  // lets build the sum div!
+  let sumString = "</div><div class='rollTitle smallerText'> = <span style='margin: 0em 0.3em;'>"+sum+"</span>";
+  if (dyeBonus > 0) {
+	sumString += "+<span style='border:0.1em solid var(--dice_"+game.actors.get(thisActorID).system.dyed+");border-radius: 0.5em;margin: 0em 0.15em;padding: 0em 0.15em;'>"+dyeBonus+"</span>";
+  }
+  if (colorlessBonus > 0) {
+	sumString += "+<span style='margin: 0em 0.3em;'>"+colorlessBonus+"</span>";
+  }
+  if (extraSum > 0) {
+	sumString += "+<span style='border:0.1em solid var(--dice_colorless);border-radius: 0.5em;margin: 0em 0.15em;padding: 0em 0.15em;'>"+extraSum+"</span>"
+  } 
+  
+  let totalSum = sum + dyeBonus + colorlessBonus + extraSum;
+  if ((dyeBonus + colorlessBonus + extraSum) > 0) {
+	sumString += "</div><div class='rollTitle smallerText' style='font-weight: 700;border: none;background-color: var(--sentimentMidBG);'> = "+totalSum+"</div>";
+	resultContent += sumString;
+  } else {
+	resultContent += "</div><div class='rollTitle smallerText'> = "+sum+"</div>";
+  }
+    
   return resultContent;
 }
 
@@ -181,13 +228,30 @@ function dyeRoll(thisActorID) {
    
    let dice = game.actors.get(thisActorID).system.attr_dice;
    let rollAmount = 0;
-   //function determines how many dice we're rolling.
-   Object.keys(dice).forEach(function (item, index) {
-	   if (Object.values(dice)[index].isEnabled) {
-		   rollAmount++;
+   
+   //function determines how many dice we're rolling. 
+
+   new Dialog({
+	   title: "Any bonuses or extra dice?",
+	   content: "<div class='sentimentDialog'><p>Bonuses:<input id='bonusVal' type='number' value='0'/></p><p>Extra dice:<input id='bonusDice' type='number' value='0'/></p></div>",
+	   buttons: {
+		   confirm: {
+			   label: "Confirm",
+			   callback: () => {
+					let bonus = parseInt($('input#bonusVal').val(),10);
+					rollAmount = parseInt($('input#bonusDice').val(),10);
+					
+					Object.keys(dice).forEach(function (item, index) {
+						if (Object.values(dice)[index].isEnabled) {
+						rollAmount++;
+					}
+					});
+					makeRole(rollAmount+"d6", thisActorID, bonus);
+			   }
 	   }
-   });
-   makeRole(rollAmount+"d6", thisActorID);
+	   }
+	
+   }).render(true);
 }
 // ############################################################
 
@@ -196,7 +260,7 @@ function doRoll(thisActorID, color) {
 	if (color == "colorless") {
 	var diceAmount = 1;	
 	   new Dialog({
-		   title: "Roll to Do!",
+		   title: "Extra d6!",
 		   content: "<div class='sentimentDialog'>How many d6?<br><input id='amountVal' type='number' value='1'/></div>",
 		   buttons: {
 			   confirm: {
@@ -216,7 +280,7 @@ function doRoll(thisActorID, color) {
 	
 	function x (diceString, c, color) {
 	   new Dialog({
-		   title: "Roll to Do!",
+		   title: "Roll bonuses!",
 		   content: "<div class='sentimentDialog'>Any bonuses?<br><input id='bonusVal' type='number' value='0'/></div>",
 		   buttons: {
 			   confirm: {
@@ -264,7 +328,7 @@ async function rollOnce(diceString, thisActorID, color, bonus) {
 		  //youre dyed!
 	  val = getProperty(game.actors.get(thisActorID),
 	  ("system.attr_dice."+color+".value"));
-	  chatTemplate += "<div class='dyedAnnounce'>"+thisActorID+" is currently DYED "+color+"!</div>";
+	  chatTemplate += "<div class='dyedAnnounce'>"+game.actors.get(thisActorID).name+" is currently DYED "+color+"!</div>";
   }
   
   let sum = parseInt(val, 10) + parseInt(bonus, 10) + val20;

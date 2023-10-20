@@ -71,6 +71,7 @@
 	max-height: 35em;
 	overflow-y: auto;
 	overflow-x: hidden;
+	scrollbar-width: none; /* firefox scrollbar fix */ 
 }
 
 .sentiment ol::-webkit-scrollbar {
@@ -96,7 +97,7 @@
 }
 
 .sheet {
-	max-width: 600px;
+	min-width: 680px;
 	font-weight: 450;
 }
 
@@ -127,8 +128,7 @@ div.sentimentMessage {
 }
 
 div.sentimentMessage[data-msgtype="swing"] b {
-	border: 0.2em solid transparent;
-    padding: 0.1em;
+	border-bottom: 0.2em solid transparent;
 }
 
 div.sentimentMessage[data-msgType="ignite"]{
@@ -146,6 +146,40 @@ div.sentimentMessage[data-msgtype="ignite"] p {
     border-top: thin solid var(--sentimentDarkBG);
     font-style: italic;
     padding: 0.5em 0;
+}
+/* ####### */
+div.sentimentMessage[data-msgtype="gift"] div {
+	font-size: 1em;
+    padding: 0.5em 0;
+	display: flex;
+    flex-direction: column;
+}
+div.sentimentMessage[data-msgtype="gift"] div.description {
+	font-size: 0.90em;
+    text-align: initial;
+    background-color: var(--sentimentMidBG);
+    color: var(--sentimentDarkerBG);
+    padding: 0.5em 1em;
+}
+div.sentimentMessage[data-msgtype="gift"] span {
+	display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
+	padding: 0.25em;
+}
+div.sentimentMessage[data-msgtype="gift"] span.blurb {
+	margin-top: 0.33em;
+    border-top: thin solid var(--sentimentDarkBG);
+}
+div.sentimentMessage[data-msgtype="gift"] img {
+	width: 3.33em;
+}
+div.sentimentMessage[data-msgtype="gift"] p.giftLevel {
+	margin: 0em 0.5em;
+    padding: 0.1em 0.5em;
+    background-color: var(--sentimentMidBG);
+    border-radius: 1em;
 }
 
 /* ####### CHARACTER SHEET ####### */
@@ -188,7 +222,7 @@ header.sheet-header {
 div.buttonRow {
 	display: flex;
 	flex-direction: row;
-    justify-content: center;
+    justify-content: space-evenly;
     align-content: center;
 	align-items: center;
 	padding: 0.125em;
@@ -210,6 +244,7 @@ button#dyeRoll p {
 	background-color: var(--sentimentLightBG);
 	padding: 0.25em;
 	border-radius: 0.5em;
+	margin: 0.25em;
 }
 
 .sentiment input.healthInput[type="number"] {
@@ -252,6 +287,7 @@ span#swingStatus {
 	border-radius: 0.5em;
 	text-align: center;
 	font-weight: 650;
+	min-width: 9em; 
 }
 }
 a#igniteSwing {
@@ -388,7 +424,9 @@ div.smallerText {
 	font-size: 1.5em;
 	font-family: 'Sono';
 	font-weight: 600;
-	padding-bottom: 0.2em;
+	padding: 0.15em;
+	justify-content: center;
+	align-items: center;
 }
 span.smallerText {
 	font-size: 0.55em;
@@ -531,13 +569,14 @@ ol#giftList {
 }
 
 a.giftCreate {
-    order: 9999;
+    position: fixed;
     font-weight: 700;
     font-size: 1.25em;
     align-self: flex-end;
     flex: 1 0 100%;
-    padding: 0.4em 2em;
-    text-align: right;
+    padding: 0.5em 0.2em;
+    text-align: center;
+    border-radius: 0.66em;
 }
 
 span.bondCreate {
@@ -659,19 +698,19 @@ ol#giftList img.itemImg{
 ol#giftList .giftDesc{
     border-radius: 0.33em;
     border: thin solid var(--sentimentMidBG);
-    padding: 1em;
+    padding: 0em 1em;
 	color: var(--sentimentDarkerBG);
 	text-align: initial;
 	display: none;
 }
 
-ol#giftList .toggleContent{
+.toggleContent{
 	min-height: 1em;
     background-color: var(--sentimentMidBG);
 	text-align: center;
-	max-width: 38em;
+	max-width: 100%;
 }
-ol#giftList .toggleContent i{
+.toggleContent i{
 	color: var(--sentimentLightBG);
 }
 
@@ -846,13 +885,8 @@ div.sentimentDialog {
 }
 
 div.sentimentDialog input {
-	flex: 0 1 50%;
-    margin-left: 1em;
-}
-
-div.sentimentDialog input {
-	flex: 0 1 50%;
-    margin-left: 1em;
+	max-width: 5em;
+    margin: 0em 1.5em 0em 1em;
 }
 
 /* notes tab */
